@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login</title>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <form id="loginForm" method="POST" action="/login">
+        <p class="heading">Login</p>
+        <div class="box">
+          <p>Email</p>
+          <div>
+            <input type="email" id="email" name="email" placeholder="Email" />
+          </div>
+        </div>
+        <div class="box">
+          <p>Password</p>
+          <div>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Password"
+            />
+          </div>
+        </div>
+        <button class="loginBtn">Login</button>
+        <p class="text">
+          Don't have an account?
+          <a href="http://localhost:3000/register">Sign up</a>
+        </p>
+      </form>
+    </div>
+
+    <!-- <script>
+      const loginForm = document.getElementById('loginForm');
+
+      loginForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        if (!email || !password) {
+          swal('Error', 'Email and password are required', 'error');
+          return;
+        }
+
+        const response = await fetch('/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Login successful, redirect to home.html
+          window.location.href = 'home.html';
+        } else {
+          // Login failed, display error message
+          swal('Error', data.error, 'error');
+        }
+      });
+    </script> -->
+    <script src="login.js"></script>
+  </body>
+</html>
