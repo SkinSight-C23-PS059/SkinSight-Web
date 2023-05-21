@@ -1,10 +1,11 @@
 const express = require('express');
 const mysql = require('mysql');
 const path = require('path');
+const bcrypt = require('bcrypt');
+const cors = require('cors');
 
 const app = express();
 
-const cors = require('cors');
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -56,24 +57,37 @@ app.post('/register', (req, res) => {
             res.status(409).json({ message: 'Email already exists' });
             break;
           default:
-            connection.query(
-              'INSERT INTO users (email, username, password) VALUES (?, ?, ?)',
-              [email, username, password],
-              (error, results) => {
-                if (error) {
-                  console.error('Error:', error);
-                  console.log('Internal server error');
-                  res.setHeader('Content-Type', 'application/json');
-                  res.status(500).json({ message: 'Internal server error' });
-                } else {
-                  console.log('User registered successfully');
-                  res.setHeader('Content-Type', 'application/json');
-                  res
-                    .status(200)
-                    .json({ message: 'User registered successfully' });
-                }
+            // Enkripsi password menggunakan bcrypt
+            bcrypt.hash(password, 10, (err, hashedPassword) => {
+              if (err) {
+                console.error('Error hashing password:', err);
+                console.log('Internal server error');
+                res.setHeader('Content-Type', 'application/json');
+                res.status(500).json({ message: 'Internal server error' });
+              } else {
+                // Simpan hashedPassword ke dalam database
+                connection.query(
+                  'INSERT INTO users (email, username, password) VALUES (?, ?, ?)',
+                  [email, username, hashedPassword],
+                  (error, results) => {
+                    if (error) {
+                      console.error('Error:', error);
+                      console.log('Internal server error');
+                      res.setHeader('Content-Type', 'application/json');
+                      res
+                        .status(500)
+                        .json({ message: 'Internal server error' });
+                    } else {
+                      console.log('User registered successfully');
+                      res.setHeader('Content-Type', 'application/json');
+                      res
+                        .status(200)
+                        .json({ message: 'User registered successfully' });
+                    }
+                  }
+                );
               }
-            );
+            });
         }
       }
     }
@@ -84,8 +98,8 @@ app.post('/register', (req, res) => {
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
 
-  const query = 'SELECT * FROM users WHERE email = ? AND password = ?';
-  connection.query(query, [email, password], (error, results) => {
+  const query = 'SELECT * FROM users WHERE email = ?';
+  connection.query(query, [email], (error, results) => {
     if (error) {
       console.error('Error logging in:', error);
       console.log('Failed to log in');
@@ -96,9 +110,23 @@ app.post('/login', (req, res) => {
       res.setHeader('Content-Type', 'application/json');
       res.status(401).json({ error: 'Invalid email or password' });
     } else {
-      console.log('Login successful');
-      res.setHeader('Content-Type', 'application/json');
-      res.status(200).json({ message: 'Login successful' });
+      // Bandingkan password yang dimasukkan dengan password terenkripsi dalam database
+      bcrypt.compare(password, results[0].password, (err, match) => {
+        if (err) {
+          console.error('Error comparing passwords:', err);
+          console.log('Failed to log in');
+          res.setHeader('Content-Type', 'application/json');
+          res.status(500).json({ error: 'Failed to log in' });
+        } else if (match) {
+          console.log('Login successful');
+          res.setHeader('Content-Type', 'application/json');
+          res.status(200).json({ message: 'Login successful' });
+        } else {
+          console.log('Invalid email or password');
+          res.setHeader('Content-Type', 'application/json');
+          res.status(401).json({ error: 'Invalid email or password' });
+        }
+      });
     }
   });
 });
