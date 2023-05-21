@@ -36,6 +36,7 @@ registrationForm.addEventListener('submit', async (event) => {
         document.getElementById('email').value = '';
         document.getElementById('username').value = '';
         document.getElementById('password').value = '';
+        window.location.assign("login.html");
       });
     } else if (response.status === 409) {
       Swal.fire({

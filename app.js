@@ -11,6 +11,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('assets'));
 
+
+// Masuk ke home url
+app.get('/', (req, res) => {
+  const filePath = path.join(__dirname, 'assets', 'login.html');
+  res.sendFile(filePath);
+});
 // Koneksi ke Cloud SQL
 const connection = mysql.createConnection({
   host: '34.101.199.121',
