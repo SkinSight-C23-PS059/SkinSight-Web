@@ -1,3 +1,15 @@
+const sign_in_btn = document.querySelector('#sign-in-btn');
+const sign_up_btn = document.querySelector('#sign-up-btn');
+const container = document.querySelector('.container');
+
+sign_up_btn.addEventListener('click', () => {
+  container.classList.add('sign-up-mode');
+});
+
+sign_in_btn.addEventListener('click', () => {
+  container.classList.remove('sign-up-mode');
+});
+
 const registrationForm = document.getElementById('registrationForm');
 
 registrationForm.addEventListener('submit', async (event) => {
@@ -19,7 +31,7 @@ registrationForm.addEventListener('submit', async (event) => {
   }
 
   try {
-    const response = await axios.post('/register', {
+    const response = await axios.post('/', {
       email,
       username,
       password,
@@ -36,7 +48,6 @@ registrationForm.addEventListener('submit', async (event) => {
         document.getElementById('email').value = '';
         document.getElementById('username').value = '';
         document.getElementById('password').value = '';
-        window.location.assign("login.html");
       });
     } else if (response.status === 409) {
       Swal.fire({
@@ -64,6 +75,64 @@ registrationForm.addEventListener('submit', async (event) => {
         icon: 'error',
         title: 'Registration Failed',
         text: 'Registration failed. Please try again.',
+      });
+    }
+  }
+});
+
+const loginForm = document.getElementById('loginForm');
+
+loginForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const email = document.getElementById('logemail').value;
+  const password = document.getElementById('logpassword').value;
+
+  if (!email || !password) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Login Failed',
+      text: 'Email and password are required',
+    });
+    return;
+  }
+
+  try {
+    const response = await axios.post('/login', {
+      email,
+      password,
+    });
+
+    if (response.status === 200) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Login Successful',
+        text: 'You have successfully logged in.',
+      }).then(() => {
+        // Redirect to home.html after successful login
+        window.location.href = 'home.html';
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Login Failed',
+        text: response.data.error || 'Invalid email or password',
+      });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+
+    if (error.response && error.response.data && error.response.data.error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Login Failed',
+        text: error.response.data.error,
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Login Failed',
+        text: 'Login failed. Please try again.',
       });
     }
   }

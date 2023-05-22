@@ -33,8 +33,8 @@ connection.connect((error) => {
   }
 });
 
-// Endpoint untuk registrasi
-app.post('/register', (req, res) => {
+// Endpoint untuk registrasi dan login
+app.post('/', (req, res) => {
   const { email, username, password } = req.body;
 
   // Periksa apakah email, username, dan password kosong
@@ -100,7 +100,6 @@ app.post('/register', (req, res) => {
   );
 });
 
-// Endpoint untuk login
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
 
@@ -137,15 +136,8 @@ app.post('/login', (req, res) => {
   });
 });
 
-// Routing untuk halaman register
-app.get('/register', (req, res) => {
-  const filePath = path.join(__dirname, 'assets', 'register.html');
-  res.sendFile(filePath);
-});
-
-// Routing untuk halaman login
-app.get('/login', (req, res) => {
-  const filePath = path.join(__dirname, 'assets', 'login.html');
+app.get('/index', (req, res) => {
+  const filePath = path.join(__dirname, 'assets', 'index.html');
   res.sendFile(filePath);
 });
 
