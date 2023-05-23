@@ -20,8 +20,7 @@ const google = document.getElementById('uidGoogle');
 google.addEventListener('click' , () => {
   signInWithPopup(auth, provider)
           .then((result) => {
-            console.log('Login Google');
-            console.log(result);
+            window.location.href = 'home.html';
               // This gives you a Google Access Token. You can use it to access Google APIs.
                const credential = GoogleAuthProvider.credentialFromResult(result);
                const token = credential.accessToken;
