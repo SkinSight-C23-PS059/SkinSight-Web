@@ -18,7 +18,6 @@ registrationForm.addEventListener('submit', async (event) => {
   const email = document.getElementById('email').value;
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
-
   // Periksa apakah email, username, dan password kosong
   if (!email || !username || !password) {
     console.log('Email, username, and password are required');
@@ -137,3 +136,5 @@ loginForm.addEventListener('submit', async (event) => {
     }
   }
 });
+
+

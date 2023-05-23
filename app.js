@@ -14,9 +14,12 @@ app.use(express.static('assets'));
 
 // Masuk ke home url
 app.get('/', (req, res) => {
+  res.header('Content-Type' , 'text/html');
   const filePath = path.join(__dirname, 'assets', 'login.html');
   res.sendFile(filePath);
 });
+
+
 // Koneksi ke Cloud SQL
 const connection = mysql.createConnection({
   host: '34.101.199.121',
@@ -102,7 +105,6 @@ app.post('/', (req, res) => {
 
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
-
   const query = 'SELECT * FROM users WHERE email = ?';
   connection.query(query, [email], (error, results) => {
     if (error) {
@@ -135,13 +137,9 @@ app.post('/login', (req, res) => {
     }
   });
 });
-
-app.get('/index', (req, res) => {
-  const filePath = path.join(__dirname, 'assets', 'index.html');
-  res.sendFile(filePath);
-});
-
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });
+
+

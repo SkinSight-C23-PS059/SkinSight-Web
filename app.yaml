@@ -1,0 +1,2 @@
+service : skinsight-auth
+runtime : nodejs16
