@@ -20,6 +20,7 @@
     "firebase-admin": "^11.8.0",
     "firebaseui": "^6.0.2",
     "mysql": "^2.18.1",
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "uuid": "^9.0.0"
   }
 }
