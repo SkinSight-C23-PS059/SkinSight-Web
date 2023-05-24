@@ -11,7 +11,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('assets'));
 
-
 // Masuk ke home url
 app.get('/', (req, res) => {
   const filePath = path.join(__dirname, 'assets', 'login.html');
@@ -134,6 +133,40 @@ app.post('/login', (req, res) => {
       });
     }
   });
+});
+
+app.post('/save-bookmark', (req, res) => {
+  const { image, result } = req.body;
+
+  // Periksa apakah image dan result tersedia
+  if (!image || !result) {
+    console.log('Image and result are required');
+    return res.status(400).json({ message: 'Image and result are required' });
+  }
+
+  // Periksa apakah user telah terautentikasi dan user object-nya terdefinisi
+  if (!req.user || !req.user.id) {
+    console.log('User authentication required');
+    return res.status(401).json({ message: 'User authentication required' });
+  }
+
+  // Lakukan operasi INSERT ke tabel bookmark di database
+  connection.query(
+    'INSERT INTO bookmark (user_id, image, disease_name, description, treatment) VALUES (?, ?, ?, ?, ?)',
+    [req.user.id, image, result.name, result.description, result.treatment],
+    (error, results) => {
+      if (error) {
+        console.error('Error:', error);
+        console.log('Internal server error');
+        res.setHeader('Content-Type', 'application/json');
+        res.status(500).json({ message: 'Internal server error' });
+      } else {
+        console.log('Bookmark saved successfully');
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json({ message: 'Bookmark saved successfully' });
+      }
+    }
+  );
 });
 
 app.get('/index', (req, res) => {

@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "start-dev": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +16,10 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
-    "mysql": "^2.18.1"
+    "firebase": "^9.22.0",
+    "firebase-admin": "^11.8.0",
+    "firebaseui": "^6.0.2",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.22"
   }
 }

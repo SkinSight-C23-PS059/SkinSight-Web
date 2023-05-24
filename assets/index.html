@@ -9,7 +9,7 @@
     ></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/style.css" />
     <title>Sign in & Sign up Form</title>
   </head>
 
@@ -31,6 +31,7 @@
                 id="logemail"
                 name="email"
                 placeholder="Email"
+                data-redirecturi="home.html"
               />
             </div>
             <div class="input-field">
@@ -42,23 +43,26 @@
                 placeholder="Password"
               />
             </div>
-            <input type="submit" value="Login" class="btn solid" />
+            <input type="submit" value="Login" class="btn solid" id="sign" />
             <p class="social-text">Or Sign in with social platforms</p>
-            <div class="social-media">
-              <a href="#" class="social-icon">
-                <i class="fab fa-facebook-f"></i>
-              </a>
-              <a href="#" class="social-icon">
-                <i class="fab fa-twitter"></i>
-              </a>
-              <a href="#" class="social-icon">
-                <i class="fab fa-google"></i>
-              </a>
-              <a href="#" class="social-icon">
-                <i class="fab fa-apple"></i>
-              </a>
-            </div>
           </form>
+
+          <!-- Login with social media -->
+          <div class="social-media">
+            <a href="#" class="social-icon" id="facebook">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="social-icon" id="twitter">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <button class="social-icon" id="uidGoogle">
+              <i class="fab fa-google"></i>
+            </button>
+            <a href="#" class="social-icon" id="apple">
+              <i class="fab fa-apple"></i>
+            </a>
+          </div>
+
           <form id="registrationForm" action="/" class="sign-up-form">
             <h2 class="title">Sign up</h2>
             <div class="input-field">
@@ -111,7 +115,7 @@
         </div>
       </div>
     </div>
-
-    <script src="script.js"></script>
+    <script type="module" src="./config/firebaseAuth.js"></script>
+    <script src="js/script.js"></script>
   </body>
 </html>
