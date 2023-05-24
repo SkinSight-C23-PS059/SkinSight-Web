@@ -1,9 +1,12 @@
+
 const body = document.querySelector('body');
 const nav = document.querySelector('nav');
 const modeToggle = document.querySelector('.dark-light');
 const searchToggle = document.querySelector('.searchToggle');
 const sidebarOpen = document.querySelector('.sidebarOpen');
 const sidebarClose = document.querySelector('.siderbarClose');
+
+
 
 let getMode = localStorage.getItem('mode');
 if (getMode && getMode === 'dark-mode') {
@@ -193,16 +196,15 @@ function getDiseaseData(image) {
 }
 
 function saveToBookmark() {
+  // Ambil token otentikasi dari cookie
+  
+
   const bookmarkItem = {
     image: imgArea.dataset.img, // Nama gambar
     result: getDiseaseData(inputFile.files[0]), // Hasil deteksi
   };
 
-  // Ambil token otentikasi dari cookie
-  const token = document.cookie
-    .split(';')
-    .find((cookie) => cookie.trim().startsWith('token='))
-    ?.split('=')[1];
+  
 
   // Kirim data bookmark ke server (backend)
   fetch('/save-bookmark', {
@@ -210,13 +212,12 @@ function saveToBookmark() {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`, // Tambahkan header Authorization
     },
     body: JSON.stringify(bookmarkItem),
   })
     .then((response) => response.json())
     .then((data) => {
-      if (data.success) {
+      if (data !== null) { // updated condition
         Swal.fire({
           icon: 'success',
           title: 'Bookmark Saved',
@@ -240,4 +241,4 @@ function saveToBookmark() {
       });
       console.error('Error while saving bookmark:', error);
     });
-}
+  }

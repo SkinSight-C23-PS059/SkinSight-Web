@@ -3,6 +3,8 @@ const mysql = require('mysql');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
+const {v4} = require('uuid'); // updated user_id generate fixing multi primary 
+let myuuid = v4();// updated user_id generate fixing multi primary
 
 const app = express();
 
@@ -139,7 +141,7 @@ app.post('/login', (req, res) => {
 
 
 app.post('/save-bookmark', (req, res) => {
-  const { image, result } = req.body;
+  const { image, result} = req.body;
 
   // Periksa apakah image dan result tersedia
   if (!image || !result) {
@@ -147,16 +149,17 @@ app.post('/save-bookmark', (req, res) => {
     return res.status(400).json({ message: 'Image and result are required' });
   }
 
-  // Periksa apakah user telah terautentikasi dan user object-nya terdefinisi
-  if (!req.user || !req.user.id) {
-    console.log('User authentication required');
-    return res.status(401).json({ message: 'User authentication required' });
+  if(myuuid === null) {
+    return res.status(404).json({message : "User id not found"});
   }
+
+  // Periksa apakah user telah terautentikasi dan user object-nya terdefinisi
+
 
   // Lakukan operasi INSERT ke tabel bookmark di database
   connection.query(
     'INSERT INTO bookmark (user_id, image, disease_name, description, treatment) VALUES (?, ?, ?, ?, ?)',
-    [req.user.id, image, result.name, result.description, result.treatment],
+    [myuuid, image, result.name, result.description, result.treatment], // updated user_id object
     (error, results) => {
       if (error) {
         console.error('Error:', error);
