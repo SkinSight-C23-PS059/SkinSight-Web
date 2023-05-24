@@ -1,1 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Account</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Sertakan file CSS jika diperlukan -->
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="myaccount.html">My Account</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="content">
+      <h1>Welcome to My Account</h1>
+      <div class="account-info">
+        <h2>Account Information</h2>
+        <p>Username: John Doe</p>
+        <p>Email: john.doe@example.com</p>
+        <p>Membership Level: Gold</p>
+      </div>
+      <div class="bookmark-container">
+        <h2>Bookmark</h2>
+        <div id="bookmarkContainer"></div>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2023 My Website. All rights reserved.</p>
+    </footer>
+
+    <!-- Sertakan file JavaScript jika diperlukan -->
+    <script>
+      // Menangkap pesan dari jendela anak (home.html)
+      window.addEventListener('message', function (event) {
+        if (event.data.type === 'saveBookmark') {
+          // Tampilkan data bookmark terbaru di halaman My Account
+          displayBookmarkData(event.data.data);
+        }
+      });
+
+      // Fungsi untuk menampilkan data bookmark
+      function displayBookmarkData(bookmark) {
+        // Ambil elemen bookmark container di halaman My Account
+        const bookmarkContainer = document.querySelector('#bookmarkContainer');
+
+        if (bookmarkContainer) {
+          // Buat elemen untuk data bookmark dan tambahkan ke bookmark container
+          const bookmarkItem = document.createElement('div');
+          bookmarkItem.innerHTML = `
+                    <img src="images/${bookmark.image}" alt="${bookmark.image}" />
+                    <h3>Hasil Penyakit Kulit</h3>
+                    <p>Nama Penyakit: ${bookmark.result.name}</p>
+                    <p>Deskripsi: ${bookmark.result.description}</p>
+                    <p>Pengobatan: ${bookmark.result.treatment}</p>
+                `;
+          bookmarkContainer.appendChild(bookmarkItem);
+        }
+      }
+    </script>
+  </body>
+</html>
 
