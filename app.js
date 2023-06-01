@@ -11,22 +11,32 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('assets'));
+// app.use(express.static('assets'));
 
 // Masuk ke home url
-app.get('/', (req, res) => {
-  res.header('Content-Type' , 'text/html');
-  const filePath = path.join(__dirname, 'assets', 'login.html');
-  res.sendFile(filePath);
+// app.get('/', (req, res) => {
+//   res.header('Content-Type' , 'text/html');
+//   const filePath = path.join(__dirname, 'assets', 'login.html');
+//   res.sendFile(filePath);
+// });
+
+
+app.get('/' , (req , res)=>{
+  res.status(200).json({
+    message : 'Get Access Back-End API'
+  })
 });
+
+
+
 
 
 // Koneksi ke Cloud SQL
 const connection = mysql.createConnection({
-  host: '34.101.199.121',
+  host: '34.101.168.179',
   user: 'root',
   password: '123456',
-  database: 'test_login_db',
+  database: 'skinsight',
 });
 
 connection.connect((error) => {
@@ -38,7 +48,7 @@ connection.connect((error) => {
 });
 
 // Endpoint untuk registrasi dan login
-app.post('/', (req, res) => {
+app.post('/register', (req, res) => {
   const { email, username, password } = req.body;
 
   // Periksa apakah email, username, dan password kosong
@@ -142,6 +152,7 @@ app.post('/login', (req, res) => {
 
 app.post('/save-bookmark', (req, res) => {
   const { image, result} = req.body;
+  console.log(result);
 
   // Periksa apakah image dan result tersedia
   if (!image || !result) {
@@ -158,8 +169,8 @@ app.post('/save-bookmark', (req, res) => {
 
   // Lakukan operasi INSERT ke tabel bookmark di database
   connection.query(
-    'INSERT INTO bookmark (user_id, image, disease_name, description, treatment) VALUES (?, ?, ?, ?, ?)',
-    [myuuid, image, result.name, result.description, result.treatment], // updated user_id object
+    'INSERT INTO bookmark (image, disease_name, description, treatment) VALUES (?, ?, ?, ?)',
+    [image, result.name, result.description, result.treatment], // updated user_id object
     (error, results) => {
       if (error) {
         console.error('Error:', error);
@@ -175,10 +186,22 @@ app.post('/save-bookmark', (req, res) => {
   );
 });
 
-app.get('/index', (req, res) => {
-  const filePath = path.join(__dirname, 'assets', 'index.html');
-  res.sendFile(filePath);
-});
+app.get('/save-bookmark' , (req , res)=>{
+  const sql = "SELECT * FROM bookmark";
+  connection.query(sql , (err , fields)=>{
+    res.status(200).json({
+      message : "GET ALL BOOKMARK",
+      data : [{
+        fields
+      }]
+    })
+  })
+})
+
+// app.get('/index', (req, res) => {
+//   const filePath = path.join(__dirname, 'assets', 'index.html');
+//   res.sendFile(filePath);
+// });
 
 
 const port = process.env.PORT || 3000;
