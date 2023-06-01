@@ -3,6 +3,8 @@ const mysql = require('mysql');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
+const {v4} = require('uuid'); // updated user_id generate fixing multi primary 
+let myuuid = v4();// updated user_id generate fixing multi primary
 
 const app = express();
 
@@ -10,6 +12,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('assets'));
+
+// Masuk ke home url
+app.get('/', (req, res) => {
+  res.header('Content-Type' , 'text/html');
+  const filePath = path.join(__dirname, 'assets', 'login.html');
+  res.sendFile(filePath);
+});
+
 
 // Koneksi ke Cloud SQL
 const connection = mysql.createConnection({
@@ -27,8 +37,8 @@ connection.connect((error) => {
   }
 });
 
-// Endpoint untuk registrasi
-app.post('/register', (req, res) => {
+// Endpoint untuk registrasi dan login
+app.post('/', (req, res) => {
   const { email, username, password } = req.body;
 
   // Periksa apakah email, username, dan password kosong
@@ -94,10 +104,8 @@ app.post('/register', (req, res) => {
   );
 });
 
-// Endpoint untuk login
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
-
   const query = 'SELECT * FROM users WHERE email = ?';
   connection.query(query, [email], (error, results) => {
     if (error) {
@@ -131,19 +139,51 @@ app.post('/login', (req, res) => {
   });
 });
 
-// Routing untuk halaman register
-app.get('/register', (req, res) => {
-  const filePath = path.join(__dirname, 'assets', 'register.html');
+
+app.post('/save-bookmark', (req, res) => {
+  const { image, result} = req.body;
+
+  // Periksa apakah image dan result tersedia
+  if (!image || !result) {
+    console.log('Image and result are required');
+    return res.status(400).json({ message: 'Image and result are required' });
+  }
+
+  if(myuuid === null) {
+    return res.status(404).json({message : "User id not found"});
+  }
+
+  // Periksa apakah user telah terautentikasi dan user object-nya terdefinisi
+
+
+  // Lakukan operasi INSERT ke tabel bookmark di database
+  connection.query(
+    'INSERT INTO bookmark (user_id, image, disease_name, description, treatment) VALUES (?, ?, ?, ?, ?)',
+    [myuuid, image, result.name, result.description, result.treatment], // updated user_id object
+    (error, results) => {
+      if (error) {
+        console.error('Error:', error);
+        console.log('Internal server error');
+        res.setHeader('Content-Type', 'application/json');
+        res.status(500).json({ message: 'Internal server error' });
+      } else {
+        console.log('Bookmark saved successfully');
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json({ message: 'Bookmark saved successfully' });
+      }
+    }
+  );
+});
+
+app.get('/index', (req, res) => {
+  const filePath = path.join(__dirname, 'assets', 'index.html');
   res.sendFile(filePath);
 });
 
-// Routing untuk halaman login
-app.get('/login', (req, res) => {
-  const filePath = path.join(__dirname, 'assets', 'login.html');
-  res.sendFile(filePath);
-});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });
+
+
