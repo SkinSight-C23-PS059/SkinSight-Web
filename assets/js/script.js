@@ -31,7 +31,7 @@ registrationForm.addEventListener('submit', async (event) => {
   }
 
   try {
-    const response = await axios.post('/', {
+    const response = await axios.post('/register', {
       email,
       username,
       password,
@@ -110,7 +110,7 @@ loginForm.addEventListener('submit', async (event) => {
         text: 'You have successfully logged in.',
       }).then(() => {
         // Redirect to home.html after successful login
-        window.location.href = 'home.html';
+        window.location.href = 'index.html';
       });
     } else {
       Swal.fire({
