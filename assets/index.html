@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ===== CSS ===== -->
+    <link rel="stylesheet" href="css/home.css" />
+
+    <!-- ===== Boxicons CSS ===== -->
+    <link
+      href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- ===== SweetAlert2 CSS ===== -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <title>Home</title>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-bar">
+        <i class="bx bx-menu sidebarOpen"></i>
+        <span class="logo navLogo"><a href="#">SkinSight</a></span>
+
+        <div class="menu">
+          <div class="logo-toggle">
+            <span class="logo"><a href="#">SkinSight</a></span>
+            <i class="bx bx-x siderbarClose"></i>
+          </div>
+
+          <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="myaccount.html">My Account</a></li>
+          </ul>
+        </div>
+
+        <div class="darkLight-searchBox">
+          <div class="dark-light">
+            <i class="bx bx-moon moon"></i>
+            <i class="bx bx-sun sun"></i>
+          </div>
+
+          <div class="searchBox">
+            <div class="searchToggle">
+              <i class="bx bx-x cancel"></i>
+              <i class="bx bx-search search" onclick="searchFunction()"></i>
+            </div>
+
+            <div class="search-field">
+              <input type="text" id="searchInput" placeholder="Search..." />
+              <i class="bx bx-search"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <section id="uploudimage">
+        <div class="container">
+          <input type="file" id="file" accept="image/*" hidden />
+          <div class="img-area" data-img="">
+            <i class="bx bxs-cloud-upload icon"></i>
+            <h3>Upload Image</h3>
+            <p>Image size must be less than <span>2MB</span></p>
+          </div>
+          <button class="select-image">Select Image</button>
+          <button class="select-image check-result" onclick="processImage()">
+            Check Result
+          </button>
+          <button
+            class="select-image reset"
+            onclick="reset()"
+            style="display: none"
+          >
+            Reset
+          </button>
+        </div>
+      </section>
+
+      <h1 id="heading-title">Daily News</h1>
+
+      <section id="articles">
+        <!-- Konten untuk bagian articles -->
+      </section>
+    </main>
+
+    <!-- Popup section -->
+    <div class="popup-container" id="popupContainer">
+      <div class="popup-content">
+        <h2>Hasil Penyakit Kulit</h2>
+        <div id="resultContainer"></div>
+        <button class="select-image" onclick="closePopup()">Close</button>
+        <button class="select-image" onclick="saveToBookmark()">
+          <i class="fa-regular fa-bookmark"></i> Save To Bookmark
+        </button>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 2023 SkinSight. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="js/home.js" secure samesite></script>
+  </body>
+</html>
