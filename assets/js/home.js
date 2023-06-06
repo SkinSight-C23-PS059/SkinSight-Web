@@ -49,13 +49,7 @@ body.addEventListener('click', (e) => {
 
 window.addEventListener('scroll', function () {
   var nav = document.querySelector('nav');
-  var scrollPosition = window.scrollY;
-
-  if (scrollPosition > 0) {
-    nav.classList.add('fixed-nav');
-  } else {
-    nav.classList.remove('fixed-nav');
-  }
+  nav.classList.toggle('sticky', window.scrollY > 0);
 });
 
 const myAccountLink = document.querySelector(
