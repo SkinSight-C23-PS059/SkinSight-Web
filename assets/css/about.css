@@ -12,19 +12,26 @@
   --grey: #f2f2f2;
 }
 
-body {
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
   font-family: 'Poppins', sans-serif;
-  background-color: #f8f8f8;
-}
-
-* {
-  box-sizing: border-box;
+  transition: all 0.4s ease;
 }
 
 a {
   text-decoration: none;
+}
+
+body {
+  height: auto;
+  background-color: var(--body-color);
+
+  justify-content: center;
+  align-items: center;
+
+  margin-bottom: 100px; /* Memberikan jarak dengan footer sebesar 100px */
 }
 
 body.dark {
@@ -247,6 +254,35 @@ body.dark .search-field i {
   z-index: 999;
 }
 
+.about-section {
+  background: url(../img/SkinSight.png) no-repeat left;
+  background-size: 55%;
+  background-color: #fdfdfd;
+  overflow: hidden;
+  /* padding: 100px 0; */
+}
+
+.inner-container {
+  width: 55%;
+  float: right;
+  background-color: #fdfdfd;
+  padding: 100px;
+}
+
+.inner-container h1 {
+  margin-bottom: 30px;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.text {
+  font-size: 13px;
+  color: #545454;
+  line-height: 30px;
+  text-align: justify;
+  margin-bottom: 40px;
+}
+
 #team {
   width: 100%;
   min-height: 100vh;
@@ -389,8 +425,104 @@ body.dark .search-field i {
   transition: all ease 0.1s;
 }
 
+footer {
+  background-color: var(--nav-color);
+  color: var(--text-color);
+  padding: 20px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  /* Menambahkan z-index agar footer tidak tumpang tindih dengan navbar */
+}
+
 @media (max-width: 612px) {
   .box {
     flex-grow: 0.7;
+  }
+}
+@media (max-width: 790px) {
+  nav .nav-bar .sidebarOpen {
+    display: block;
+  }
+
+  .menu {
+    position: fixed;
+    height: 100%;
+    width: 320px;
+    left: -100%;
+    top: 0;
+    padding: 20px;
+    background-color: var(--side-nav);
+    z-index: 100;
+    transition: all 0.4s ease;
+  }
+
+  nav.active .menu {
+    left: -0%;
+  }
+
+  nav.active .nav-bar .navLogo a {
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+
+  .menu .logo-toggle {
+    display: block;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo-toggle .siderbarClose {
+    color: var(--text-color);
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  .nav-bar .nav-links {
+    flex-direction: column;
+    padding-top: 30px;
+  }
+
+  .nav-links li a {
+    display: block;
+    margin-top: 20px;
+  }
+
+  main {
+    margin-bottom: 140px; /* Menambahkan margin-bottom yang lebih besar pada main content di tampilan mobile */
+  }
+
+  footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .inner-container {
+    padding: 80px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .about-section {
+    background-size: 100%;
+    padding: 100px 40px;
+  }
+  .inner-container {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .about-section {
+    padding: 0;
+  }
+  .inner-container {
+    padding: 60px;
   }
 }

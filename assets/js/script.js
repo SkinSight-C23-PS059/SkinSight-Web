@@ -110,7 +110,7 @@ loginForm.addEventListener('submit', async (event) => {
         text: 'You have successfully logged in.',
       }).then(() => {
         // Redirect to home.html after successful login
-        window.location.href = 'index.html';
+        window.location.href = 'home.html';
       });
     } else {
       Swal.fire({
