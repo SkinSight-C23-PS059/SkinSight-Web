@@ -243,6 +243,9 @@ body.dark .search-field i {
   color: var(--text-color);
 }
 
+body.dark h1 {
+  color: var(--text-color);
+}
 .sticky {
   position: fixed;
   top: 0;
@@ -352,7 +355,7 @@ main {
 }
 
 #resultContainer img {
-  max-width: 50%;
+  max-width: 30%;
   height: auto;
 }
 

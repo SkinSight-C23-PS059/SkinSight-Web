@@ -4,13 +4,17 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
 const { v4 } = require('uuid');
+let myuuid = v4();
+
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
 const app = express();
-
-app.use(cors());
+app.use(bodyParser.json({ limit: '10mb' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('assets'));
+app.use(cookieParser());
 
 const connection = mysql.createConnection({
   host: '34.101.135.207',
@@ -28,6 +32,16 @@ connection.connect((error) => {
 });
 
 
+// Middleware to check if the user is logged in
+function checkLoggedIn(req, res, next) {
+  if (req.cookies.user_id) {
+    // User is logged in
+    next();
+  } else {
+    // User is not logged in, redirect to login page
+    res.redirect('/login');
+  }
+}
 
 app.get('/', (req, res) => {
   res.status(200).json({
@@ -89,47 +103,73 @@ app.post('/login', (req, res) => {
       console.error('Error logging in:', error);
       console.log('Failed to log in');
       res.setHeader('Content-Type', 'application/json');
-      res.status(500).json({ error: 'Failed to log in' });
-    } else if (results.length === 0) {
-      console.log('Invalid email or password');
-      res.setHeader('Content-Type', 'application/json');
-      res.status(401).json({ error: 'Invalid email or password' });
+      res.status(500).json({ message: 'Internal server error' });
     } else {
-      bcrypt.compare(password, results[0].password, (err, match) => {
-        if (err) {
-          console.error('Error comparing passwords:', err);
-          console.log('Failed to log in');
-          res.setHeader('Content-Type', 'application/json');
-          res.status(500).json({ error: 'Failed to log in' });
-        } else if (match) {
-          console.log('Login successful');
-          res.setHeader('Content-Type', 'application/json');
-          res.status(200).json({ message: 'Login successful' });
-        } else {
-          console.log('Invalid email or password');
-          res.setHeader('Content-Type', 'application/json');
-          res.status(401).json({ error: 'Invalid email or password' });
-        }
-      });
+      if (results.length === 0) {
+        console.log('Email not found');
+        res.status(404).json({ message: 'Email not found' });
+      } else {
+        bcrypt.compare(password, results[0].password, (err, match) => {
+          if (err) {
+            console.error('Error comparing passwords:', err);
+            console.log('Failed to log in');
+            res.setHeader('Content-Type', 'application/json');
+            res.status(500).json({ message: 'Internal server error' });
+          } else if (match) {
+            console.log('Login successful');
+            const userId = results[0].id;
+            res.cookie('user_id', userId, { httpOnly: true }); // Set user_id in a cookie
+            res.setHeader('Content-Type', 'application/json');
+            res.status(200).json({ message: 'Login successful' });
+          } else {
+            console.log('Incorrect password');
+            res.status(401).json({ message: 'Incorrect password' });
+          }
+        });
+      }
     }
   });
 });
 
+app.get('/profile', checkLoggedIn, (req, res) => {
+  const userId = req.cookies.user_id;
+  const query = 'SELECT email, username FROM users WHERE id = ?';
+  connection.query(query, [userId], (error, results) => {
+    if (error) {
+      console.error('Error retrieving user profile:', error);
+      console.log('Internal server error');
+      res.status(500).json({ message: 'Internal server error' });
+    } else {
+      if (results.length === 0) {
+        res.status(404).json({ message: 'User not found' });
+      } else {
+        const { email, username } = results[0];
+        res.status(200).json({ email, username });
+      }
+    }
+  });
+});
+
+app.get('/logout', (req, res) => {
+  res.clearCookie('user_id'); // Clear the user_id cookie
+  res.redirect('/index');
+});
+
 app.post('/save-bookmark', (req, res) => {
   const { image, result } = req.body;
+  console.log(result);
 
   if (!image || !result) {
     console.log('Image and result are required');
     return res.status(400).json({ message: 'Image and result are required' });
   }
 
-  // You should implement the authentication logic here to ensure the user is logged in before saving a bookmark
-  // Example code:
-  // if (!req.isAuthenticated()) {
-  //   return res.status(401).json({ message: 'You must be logged in to save a bookmark' });
-  // }
+  const userId = req.cookies.user_id; // Get the user_id from the cookie
 
-  const userId = v4();
+  if (!userId) {
+    return res.status(404).json({ message: 'User ID not found' });
+  }
+
   connection.query(
     'INSERT INTO bookmark (user_id, image, disease_name, description, treatment) VALUES (?, ?, ?, ?, ?)',
     [userId, image, result.name, result.description, result.treatment],
@@ -151,10 +191,7 @@ app.post('/save-bookmark', (req, res) => {
 app.get('/save-bookmark', (req, res) => {
   const sql = 'SELECT * FROM bookmark';
   connection.query(sql, (err, fields) => {
-    res.status(200).json({
-      message: 'GET ALL BOOKMARK',
-      data: fields
-    });
+    res.status(200).json({ fields });
   });
 });
 
@@ -188,10 +225,27 @@ app.get('/articles', (req, res) => {
   });
 });
 
+app.get('/profile/bookmarks', checkLoggedIn, (req, res) => {
+  const userId = req.cookies.user_id;
+  const query = 'SELECT * FROM bookmark WHERE user_id = ?';
+  connection.query(query, [userId], (error, results) => {
+    if (error) {
+      console.error('Error retrieving bookmarks:', error);
+      console.log('Internal server error');
+      res.status(500).json({ message: 'Internal server error' });
+    } else {
+      res.status(200).json({ bookmarks: results });
+    }
+  });
+});
+
+
 app.get('/index', (req, res) => {
   const filePath = path.join(__dirname, 'assets', 'index.html');
   res.sendFile(filePath);
 });
+
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

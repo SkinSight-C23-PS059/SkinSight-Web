@@ -82,6 +82,7 @@ registrationForm.addEventListener('submit', async (event) => {
 
 const loginForm = document.getElementById('loginForm');
 
+// ...
 loginForm.addEventListener('submit', async (event) => {
   event.preventDefault();
 
@@ -109,24 +110,23 @@ loginForm.addEventListener('submit', async (event) => {
         title: 'Login Successful',
         text: 'You have successfully logged in.',
       }).then(() => {
-        // Redirect to home.html after successful login
         window.location.href = 'home.html';
       });
-    } else {
+    } else if (response.status === 401) {
       Swal.fire({
         icon: 'error',
         title: 'Login Failed',
-        text: response.data.error || 'Invalid email or password',
+        text: response.data.message || 'Invalid email or password',
       });
     }
   } catch (error) {
     console.error('Error:', error);
 
-    if (error.response && error.response.data && error.response.data.error) {
+    if (error.response && error.response.data && error.response.data.message) {
       Swal.fire({
         icon: 'error',
         title: 'Login Failed',
-        text: error.response.data.error,
+        text: error.response.data.message,
       });
     } else {
       Swal.fire({
@@ -137,3 +137,4 @@ loginForm.addEventListener('submit', async (event) => {
     }
   }
 });
+// ...
