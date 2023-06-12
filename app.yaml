@@ -1,2 +1,2 @@
-service : skinsight-auth
+service : api-back-end
 runtime : nodejs16
