@@ -15,6 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('assets'));
 app.use(cookieParser());
+app.use(cors())
 
 const connection = mysql.createConnection({
   host: '34.101.135.207',
