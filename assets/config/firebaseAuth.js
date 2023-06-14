@@ -46,7 +46,7 @@ google.addEventListener('click', () => {
       const name = user.displayName;
       writeUserData(id, email, name);
       console.log(result)
-      window.location.href = 'home.html'
+      window.location.href = '../inprivate/home.html'
       // IdP data available using getAdditionalUserInfo(result)
       // ...
     }).catch((error) => {
