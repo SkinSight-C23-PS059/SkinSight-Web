@@ -110,7 +110,7 @@ loginForm.addEventListener('submit', async (event) => {
         title: 'Login Successful',
         text: 'You have successfully logged in.',
       }).then(() => {
-        window.location.href = 'home.html';
+        window.location.href = '../inprivate/home.html';
       });
     } else if (response.status === 401) {
       Swal.fire({

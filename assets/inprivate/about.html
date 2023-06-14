@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/about.css" />
+    <link rel="stylesheet" href="../css/about.css" />
     <link
       href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css"
       rel="stylesheet"
@@ -33,12 +33,13 @@
           </div>
 
           <ul class="nav-links">
-            <ul class="nav-links">
-              <li><a href="#">Home</a></li>
-              <li><a href="about.html">About</a></li>
-              <li><a href="profile.html">My Account</a></li>
-              <li><a href="login.html">Login</a></li>
-            </ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="profile.html">My Account</a></li>
+            <li>
+              <a href="/logout">Logout</a>
+              <!-- Logout link -->
+            </li>
           </ul>
         </div>
 
@@ -99,7 +100,7 @@
             </div>
 
             <div class="details">
-              <img src="img/jayadi.jpeg" alt="" />
+              <img src="../img/jayadi.jpeg" alt="" />
               <strong>Achmad Jayadi</strong>
               <p>Universitas Darma Persada</p>
             </div>
@@ -120,7 +121,7 @@
             </div>
 
             <div class="details">
-              <img src="img/SkinSight.png" alt="" />
+              <img src="../img/SkinSight.png" alt="" />
               <strong>Ahmad Sabil Deva Pratama</strong>
               <p>Universitas Dian Nuswantoro</p>
             </div>
@@ -141,7 +142,7 @@
             </div>
 
             <div class="details">
-              <img src="img/SkinSight.png" alt="" />
+              <img src="../img/bryan.jpg" alt="" />
               <strong>Bryan Christian</strong>
               <p>Institut Teknologi Sepuluh Nopember</p>
             </div>
@@ -162,15 +163,21 @@
             </div>
 
             <div class="details">
-              <img src="img/marchelli.JPG" alt="" />
+              <img src="../img/marchelli.JPG" alt="" />
               <strong>Marchelli Threecia</strong>
               <p>Institut Teknologi Sepuluh Nopember</p>
             </div>
 
             <div class="btn">
               <a href="#"><i class="fab fa-facebook-f"></i></a>
-              <a href="#"><i class="fab fa-linkedin"></i></a>
-              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a
+                href="https://www.linkedin.com/in/marchellithreecia"
+                target="_blank"
+                ><i class="fab fa-linkedin"></i
+              ></a>
+              <a href="http://instagram.com/marchellith" target="_blank"
+                ><i class="fab fa-instagram"></i
+              ></a>
               <a href="#"><i class="fab fa-github"></i></a>
             </div>
           </div>
@@ -183,7 +190,7 @@
             </div>
 
             <div class="details">
-              <img src="img/SkinSight.png" alt="" />
+              <img src="../img/SkinSight.png" alt="" />
               <strong>Nurman Syah</strong>
               <p>Universitas Darma Persada</p>
             </div>
@@ -204,15 +211,20 @@
             </div>
 
             <div class="details">
-              <img src="img/rifqi.png" alt="" />
+              <img src="../img/rifqi.png" alt="" />
               <strong>Rifqi Iqbal Pratama</strong>
               <p>Universitas Darma Persada</p>
             </div>
 
             <div class="btn">
               <a href="#"><i class="fab fa-facebook-f"></i></a>
-              <a href="#"><i class="fab fa-linkedin"></i></a>
-              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a
+                href="https://www.linkedin.com/in/rifqi-iqbal-pratama-261860168/"
+                ><i class="fab fa-linkedin"></i
+              ></a>
+              <a href="https://www.instagram.com/riiqbalprtm" target="_blank"
+                ><i class="fab fa-instagram"></i
+              ></a>
               <a href="#"><i class="fab fa-github"></i></a>
             </div>
           </div>
@@ -226,37 +238,6 @@
       </div>
     </footer>
 
-    <script src="js/index.js" secure samesite></script>
-    <script>
-      const myAccountLink = document.querySelector(
-        '.nav-links li:nth-child(3) a'
-      );
-      myAccountLink.addEventListener('click', (event) => {
-        event.preventDefault();
-
-        // Cek apakah pengguna sudah login
-        const isLoggedIn = false; // Ganti dengan logika pengguna yang telah login
-
-        if (!isLoggedIn) {
-          Swal.fire({
-            title: 'Oops!',
-            text: 'Maaf, Anda belum memiliki masuk. Silakan login terlebih dahulu',
-            icon: 'error',
-            showCancelButton: true,
-            cancelButtonText: 'Tidak',
-            confirmButtonText: 'Ya',
-          }).then((result) => {
-            if (result.isConfirmed) {
-              // Alihkan ke halaman login.html
-              window.location.href = 'login.html';
-            }
-          });
-        } else {
-          // Tambahkan logika yang diperlukan jika pengguna sudah login
-          // Contoh: Alihkan ke halaman profil pengguna
-          window.location.href = 'profile.html';
-        }
-      });
-    </script>
+    <script src="../js/about.js" secure samesite></script>
   </body>
 </html>

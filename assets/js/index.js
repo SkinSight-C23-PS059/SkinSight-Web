@@ -52,7 +52,7 @@ window.addEventListener('scroll', function () {
 });
 
 const myAccountLink = document.querySelector(
-  '.nav-links li:nth-child(4) a'
+  '.nav-links li:nth-child(3) a'
 );
 myAccountLink.addEventListener('click', (event) => {
   event.preventDefault();
