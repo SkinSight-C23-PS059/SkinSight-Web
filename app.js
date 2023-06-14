@@ -3,8 +3,8 @@ const mysql = require('mysql');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
-
-
+const { v4 } = require('uuid');
+let myuuid = v4();
 
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
@@ -15,7 +15,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('assets'));
 app.use(cookieParser());
-app.use(cors())
 
 const connection = mysql.createConnection({
   host: '34.101.135.207',
@@ -241,6 +240,8 @@ app.get('/profile/bookmarks', checkLoggedIn, (req, res) => {
 });
 
 
+
+
 app.get('/index', (req, res) => {
   const filePath = path.join(__dirname, 'assets', 'index.html');
   res.sendFile(filePath);
@@ -252,4 +253,3 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });
-module.exports = connection;
